@@ -37,6 +37,13 @@ class UserRequest extends FormRequest
 				'password' => ['required', 'string', 'between:5,255', 'confirmed'],
 				'image' => ['required', 'image', 'max:5120']
 			];
+		else if ($this->routeIs('api.profile.update'))
+			$validation = [
+				'name' => ['string', 'between:3,255'],
+				'email' => ['string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
+				'password' => ['string', 'between:5,255'],
+				'image' => ['image', 'max:5120']
+			];
 
 		return $validation;
 	}
