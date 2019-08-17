@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -64,9 +65,19 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * Get a list of all user's tweets.
+	 *
+	 * @return HasMany
+	 */
+	public function Tweets()
+	{
+		return $this->hasMany(Tweet::class);
+	}
+
+	/**
 	 * Get the profile image.
 	 *
-	 * @return \Illuminate\Support\Facades\Storage
+	 * @return Storage
 	 */
 	public function getProfileImageAttribute()
 	{

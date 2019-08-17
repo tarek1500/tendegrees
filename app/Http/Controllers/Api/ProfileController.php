@@ -15,10 +15,12 @@ class ProfileController extends Controller
 	 * Get the current user profile.
 	 *
 	 * @param  Request  $request
+	 *
 	 * @return Response
 	 */
 	public function index(Request $request)
 	{
+		// Get current user's info
 		return response(['user' => $request->user()]);
 	}
 
@@ -26,10 +28,14 @@ class ProfileController extends Controller
 	 * Update the current user profile.
 	 *
 	 * @param  UserRequest  $request
+	 *
 	 * @return Response
 	 */
 	public function update(UserRequest $request)
 	{
+		// Save the current user
+		$user = $request->user();
+		// Update user's info
 		$data = $request->only(['name', 'email']);
 
 		if ($request->has('password'))
@@ -37,12 +43,13 @@ class ProfileController extends Controller
 
 		if ($request->has('image'))
 		{
-			Storage::delete($request->user()->image);
+			Storage::delete($user->image);
 			$data['image'] = Storage::putFile('images', $request->file('image'));
 		}
 
-		$request->user()->update($data);
+		$user->update($data);
 
-		return response([], 204);
+		// Return updated info
+		return response(['user' => $user]);
 	}
 }

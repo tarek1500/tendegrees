@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 // Assign api namespace
-Route::group(['namespace' => 'api'], function () {
+Route::group(['namespace' => 'Api'], function () {
 	// Not authenticated routes
 	Route::post('login', 'AuthController@login')->name('api.login');
 	Route::post('register', 'AuthController@register')->name('api.register');
@@ -28,5 +28,7 @@ Route::group(['namespace' => 'api'], function () {
 
 		Route::get('profile', 'ProfileController@index')->name('api.profile.index');
 		Route::patch('profile', 'ProfileController@update')->name('api.profile.update');
+
+		Route::resource('tweet', 'TweetController')->except(['create', 'edit'])->names('api.tweet');
 	});
 });
