@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Assign api namespace
+Route::group(['namespace' => 'api'], function () {
+	// Not authenticated routes
+	Route::post('login', 'AuthController@login')->name('api.login');
+	Route::post('register', 'AuthController@register')->name('api.register');
+
+	Route::post('token/check', 'TokenController@checkToken')->name('api.token.check');
+	Route::post('token/refresh', 'TokenController@refreshToken')->name('api.token.refresh');
+
+	// Authenticated routes
+	Route::group(['middleware' => 'auth:api'], function () {
+		Route::post('logout', 'AuthController@logout')->name('api.logout');
+	});
 });
