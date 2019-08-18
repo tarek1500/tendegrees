@@ -75,6 +75,26 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * Get a list of followers by the user.
+	 *
+	 * @return HasMany
+	 */
+	public function Following()
+	{
+		return $this->hasMany(Follow::class);
+	}
+
+	/**
+	 * Get a list of all user's followers.
+	 *
+	 * @return HasMany
+	 */
+	public function Followers()
+	{
+		return $this->hasMany(Follow::class, 'following_id');
+	}
+
+	/**
 	 * Get the profile image.
 	 *
 	 * @return Storage

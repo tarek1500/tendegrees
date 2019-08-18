@@ -20,7 +20,6 @@ class ProfileController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		// Get current user's info
 		return response(['user' => $request->user()]);
 	}
 

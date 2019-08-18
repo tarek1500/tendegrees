@@ -18,7 +18,6 @@ class TweetController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		// Get a list of current user's tweets paginated
 		return response(['tweets' => $request->user()->tweets()->paginate(10)]);
 	}
 
@@ -52,9 +51,9 @@ class TweetController extends Controller
 		// If user can show this tweet, return it
 		if ($request->user()->can('show', $tweet))
 			return response(['tweet' => $tweet]);
-		// Otherwise return forbidden response
+		// Otherwise return unauthorized response
 		else
-			return response('', 403);
+			return response('', 401);
 	}
 
 	/**
@@ -77,9 +76,9 @@ class TweetController extends Controller
 			// Return updated tweet
 			return response(['tweet' => $tweet]);
 		}
-		// Otherwise return forbidden response
+		// Otherwise return unauthorized response
 		else
-			return response('', 403);
+			return response('', 401);
 	}
 
 	/**
@@ -101,8 +100,8 @@ class TweetController extends Controller
 			// Return no content response
 			return response('', 204);
 		}
-		// Otherwise return forbidden response
+		// Otherwise return unauthorized response
 		else
-			return response('', 403);
+			return response('', 401);
 	}
 }

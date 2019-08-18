@@ -29,6 +29,11 @@ Route::group(['namespace' => 'Api'], function () {
 		Route::get('profile', 'ProfileController@index')->name('api.profile.index');
 		Route::patch('profile', 'ProfileController@update')->name('api.profile.update');
 
+		Route::get('following', 'FollowingController@following')->name('api.user.following');
+		Route::get('followers', 'FollowingController@followers')->name('api.user.followers');
+		Route::post('follow', 'FollowingController@follow')->name('api.user.follow');
+		Route::post('unfollow', 'FollowingController@unfollow')->name('api.user.unfollow');
+
 		Route::resource('tweet', 'TweetController')->except(['create', 'edit'])->names('api.tweet');
 	});
 });
