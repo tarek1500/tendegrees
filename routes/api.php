@@ -34,6 +34,7 @@ Route::group(['namespace' => 'Api'], function () {
 		Route::post('follow', 'FollowingController@follow')->name('api.user.follow');
 		Route::post('unfollow', 'FollowingController@unfollow')->name('api.user.unfollow');
 
+		Route::get('timeline', 'TweetController@timeline')->name('api.timeline');
 		Route::resource('tweet', 'TweetController')->except(['create', 'edit'])->names('api.tweet');
 	});
 });

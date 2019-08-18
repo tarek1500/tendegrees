@@ -10,6 +10,26 @@ use Illuminate\Http\Request;
 class TweetController extends Controller
 {
 	/**
+	 * Get the current user timeline.
+	 *
+	 * @param  Request  $request
+	 *
+	 * @return Response
+	 */
+	public function timeline(Request $request)
+	{
+		// Get a list of ids of followers by the current user
+		$ids = $request->user()->following()->pluck('following_id');
+		// Push current user's id
+		$ids->push($request->user()->id);
+		// Get tweets
+		$tweets = Tweet::with('user')->whereIn('user_id', $ids)->latest('updated_at')->get();
+
+		// Return timeline's tweets
+		return response(['tweets' => $tweets]);
+	}
+
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @param  Request  $request
