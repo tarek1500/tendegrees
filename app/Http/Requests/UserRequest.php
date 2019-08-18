@@ -25,13 +25,13 @@ class UserRequest extends FormRequest
 	{
 		if ($this->routeIs('api.login'))
 			$validation = [
-				'secret' => ['required', 'string', 'max:100'],
+				'secret' => ['required', 'string'],
 				'email' => ['required', 'string', 'email', 'max:255'],
 				'password' => ['required', 'string', 'between:5,255']
 			];
 		else if ($this->routeIs('api.register'))
 			$validation = [
-				'secret' => ['required', 'string', 'max:100'],
+				'secret' => ['required', 'string'],
 				'name' => ['required', 'string', 'between:3,255'],
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
 				'password' => ['required', 'string', 'between:5,255', 'confirmed'],

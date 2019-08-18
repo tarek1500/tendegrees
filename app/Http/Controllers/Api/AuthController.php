@@ -29,15 +29,14 @@ class AuthController extends Controller
 	 */
 	public function login(UserRequest $request)
 	{
-		// Get passport client from secret
+		// Get secret key from request
 		$secret = $request->secret;
-		$client = PassportClient::where('secret', $secret)->first();
 
-		// If client exists
-		if ($client)
+		// If secret key is valid
+		if ($secret == 'test123')
 		{
 			// Create tokens
-			$tokens = $this->createTokens($client, $request->email, $request->password);
+			$tokens = $this->createTokens($request->email, $request->password);
 
 			// Return response to source
 			return $this->getAuthResponse($tokens);
@@ -78,12 +77,11 @@ class AuthController extends Controller
 	 */
 	public function register(UserRequest $request)
 	{
-		// Get passport client from secret
+		// Get secret key from request
 		$secret = $request->secret;
-		$client = PassportClient::where('secret', $secret)->first();
 
-		// If client exists
-		if ($client)
+		// If secret key is valid
+		if ($secret == 'test123')
 		{
 			// Register the user
 			$data = $request->only(['name', 'email']);
@@ -92,7 +90,7 @@ class AuthController extends Controller
 			User::create($data);
 
 			// Create tokens
-			$tokens = $this->createTokens($client, $request->email, $request->password);
+			$tokens = $this->createTokens($request->email, $request->password);
 
 			// Return response to source
 			return $this->getAuthResponse($tokens, 201);
@@ -110,9 +108,16 @@ class AuthController extends Controller
 	 *
 	 * @return array|null
 	 */
-	private function createTokens(PassportClient $client, string $email, string $password)
+	private function createTokens(string $email, string $password)
 	{
-		// Create tokens for the current user
+		// Get the first password grant client
+		$client = $this->getPassportClient();
+
+		// If there is no clients, return null
+		if ($client === null)
+			return null;
+		
+		// Otherwise create tokens for the current user
 		try
 		{
 			$response = (new GuzzleClient)->post(route('passport.token'), [
@@ -133,5 +138,15 @@ class AuthController extends Controller
 
 		// Return ok/error messages
 		return ['response' => $this->getResponseBodySummary($response), 'status' => $response->getStatusCode()];
+	}
+
+	/**
+	 * Get the first password grant client.
+	 *
+	 * @return PassportClient|null
+	 */
+	private function getPassportClient()
+	{
+		return PassportClient::where(['personal_access_client' => false, 'password_client' => true])->first();
 	}
 }

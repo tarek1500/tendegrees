@@ -23,7 +23,7 @@ class TweetController extends Controller
 		// Push current user's id
 		$ids->push($request->user()->id);
 		// Get tweets
-		$tweets = Tweet::with('user')->whereIn('user_id', $ids)->latest('updated_at')->get();
+		$tweets = Tweet::with('user')->whereIn('user_id', $ids)->latest('updated_at')->paginate(10);
 
 		// Return timeline's tweets
 		return response(['tweets' => $tweets]);
@@ -38,7 +38,7 @@ class TweetController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		return response(['tweets' => $request->user()->tweets()->paginate(10)]);
+		return response(['tweets' => $request->user()->tweets()->latest('updated_at')->paginate(10)]);
 	}
 
 	/**

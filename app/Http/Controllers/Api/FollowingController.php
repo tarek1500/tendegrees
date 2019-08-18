@@ -18,7 +18,7 @@ class FollowingController extends Controller
 	 */
 	public function following(Request $request)
 	{
-		return response(['following' => $request->user()->following]);
+		return response(['following' => $request->user()->following()->with('user')->get()]);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class FollowingController extends Controller
 	 */
 	public function followers(Request $request)
 	{
-		return response(['followers' => $request->user()->followers]);
+		return response(['followers' => $request->user()->followers()->with('user')->get()]);
 	}
 
 	/**
