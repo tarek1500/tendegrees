@@ -24,7 +24,7 @@ Route::group(['namespace' => 'Api'], function () {
 
 	// Authenticated routes
 	Route::group(['middleware' => 'auth:api'], function () {
-		Route::post('logout', 'AuthController@logout')->name('api.logout');
+		Route::get('logout', 'AuthController@logout')->name('api.logout');
 
 		Route::get('profile', 'ProfileController@index')->name('api.profile.index');
 		Route::patch('profile', 'ProfileController@update')->name('api.profile.update');
